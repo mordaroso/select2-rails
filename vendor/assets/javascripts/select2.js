@@ -986,8 +986,9 @@
             this.dropdown.hide();
             this.container.removeClass("select2-dropdown-open").removeClass("select2-container-active");
             this.results.empty();
-            this.clearSearch();
-
+            // LOCAL.CH EDIT: REMOVED TO ALLOW FREE TEXT INPUT
+            // this.clearSearch();
+            // END EDIT
             this.opts.element.trigger(jQuery.Event("close"));
         },
 
@@ -1237,7 +1238,11 @@
             this.dropdown.removeClass("select2-drop-active");
             // synonymous to .is(':focus'), which is available in jquery >= 1.6
             if (this.search[0] === document.activeElement) { this.search.blur(); }
-            this.clearSearch();
+
+            // LOCAL.CH EDIT: REMOVED TO ALLOW FREE TEXT INPUT
+            //this.clearSearch();
+            // END EDIT
+
             this.selection.find(".select2-search-choice-focus").removeClass("select2-search-choice-focus");
         },
 
@@ -1701,7 +1706,7 @@
 
         // single
         clearSearch: function () {
-            this.search.val("");
+          this.search.val("");
         },
 
         // single
@@ -1909,7 +1914,7 @@
             } else {
                 // we set this to " " instead of "" and later clear it on focus() because there is a firefox bug
                 // that does not properly render the caret when the field starts out blank
-                this.search.val(" ").width(10);
+               this.search.val(" ").width(10);
             }
         },
 
@@ -1989,6 +1994,9 @@
             if (this.opts.closeOnSelect) {
                 this.close();
                 this.search.width(10);
+                // LOCAL.CH EDIT: ADDED TO CLEAR AFTER CLICK
+                this.clearSearch();
+                // END EDIT
             } else {
                 if (this.countSelectableResults()>0) {
                     this.search.width(10);
@@ -2237,10 +2245,16 @@
         data: function(values) {
             var self=this, ids;
             if (arguments.length === 0) {
-                 return this.selection
-                     .find(".select2-search-choice")
-                     .map(function() { return $(this).data("select2-data"); })
-                     .get();
+                // LOCAL.CH EDIT: APPEND FREETEXT TO DATA
+                var data = this.selection
+                    .find(".select2-search-choice")
+                    .map(function() { return $(this).data("select2-data"); })
+                    .get();
+                if(this.search.val() !== ""){
+                  data.push({ id: 'free-text', text: this.search.val() })
+                }
+                return data;
+                // END EDIT
             } else {
                 if (!values) { values = []; }
                 ids = $.map(values, function(e) { return self.opts.id(e)});
