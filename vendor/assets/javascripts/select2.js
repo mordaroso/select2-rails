@@ -1243,6 +1243,10 @@
             //this.clearSearch();
             // END EDIT
 
+            // LOCAL.CH EDIT: TRIGGER CHANGE
+            this.triggerChange();
+            // END EDIT
+
             this.selection.find(".select2-search-choice-focus").removeClass("select2-search-choice-focus");
         },
 
@@ -2250,9 +2254,7 @@
                     .find(".select2-search-choice")
                     .map(function() { return $(this).data("select2-data"); })
                     .get();
-                if(this.search.val() !== ""){
-                  data.push({ id: 'free-text', text: this.search.val() })
-                }
+                data.push({ id: 'free-text', text: this.search.val() });
                 return data;
                 // END EDIT
             } else {
